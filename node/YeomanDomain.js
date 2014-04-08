@@ -27,16 +27,28 @@
 (function () {
     "use strict";
     
-    var os = require("os");
-        
+    // Deal with out terminal and int in out from that.
+    var terminal = require('child_process').spawn('bash');
+    
+    terminal.stdout.on('data', function (data) {
+        console.log('stdout: ' + data);
+    });
+
+    terminal.on('exit', function (code) {
+        console.log('child process exited with code ' + code);
+    });
+            
     /**
     * @private
-    * Handler function for the simple.getMemory command.
-    * @param {boolean} total If true, return total memory; if false, return free memory only.
-    * @return {number} The amount of memory.
+    * Handler function for the yeoman.getVersion command.
+    * @return {number} The version number of Yeoman.
     */
     function cmdGetVersion() {
-        return os.freemem();
+        terminal.stdin.write('yo --version');
+        terminal.stdin.end();
+        // HELP: How do ti get the yo version back to the calling function?
+        
+        return 'hi';
     }
     
     /**
